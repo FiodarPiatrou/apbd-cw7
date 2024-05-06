@@ -29,8 +29,21 @@ public class WarehouseController: ControllerBase
         {
             return BadRequest("Amount needs to be >0");
         }
+
+        var idO = await _warehouseRepository.IsOrderedAndNotFulfilledAsync(body.IdProduct, body.Amount, body.CreatedAt);
+        if ( idO== -1)
+        {
+            return NotFound("No such order");
+        }
+
+        var newId = await _warehouseRepository.InsertProductWarehouseAsync(body.IdProduct, body.IdWarehouse, idO,
+            body.Amount);
+        if (newId==-1)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError,"error on a server side");
+        }
         
-        return Ok();
+        return Ok(newId);
     }
     
 }
