@@ -43,7 +43,7 @@ public class WarehouseController: ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError,"error on a server side");
         }
         
-        return Ok(newId);
+        return Created("Registered product",newId);
     }
     
 }
